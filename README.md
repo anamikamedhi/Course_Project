@@ -1,2 +1,2 @@
-# strays_Capstone
-FInal Capstone
+# R Studio Project
+Analysis on diamonds dataset.
