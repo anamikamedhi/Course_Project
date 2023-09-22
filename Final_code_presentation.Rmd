@@ -1,0 +1,174 @@
+---
+title: "Final Project"
+author: "Anamika and Robert"
+date: '2022-09-12'
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+editor_options:
+  markdown:
+    wrap: 72
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1.Import dataset diamonds from R
+
+```{r}
+library("ggplot2")
+dm=diamonds;
+```
+
+2.  Summary Analysis. (Mean Median,Range,Quantile)
+
+```{r}
+head(dm)
+names(dm)
+dim(dm)
+summary(dm)
+```
+
+a)  The dataset has 10 columns and 53940 rows.
+
+b)  Categorical variables:- cut,, color, clarity
+
+c)  Numeric Variables- carat, depth,table, price,x,y,z
+
+Summary:
+
+Carat: Min- 0.2, Maximum- 5.01 Mean- 0.7979, Median- 0.700 It is right
+skewed because Mean\>Median.
+
+depth: Min- 43.00, Maximum-79.00 Mean-61.75, Median-61.80
+
+Price : Min-326, Maximum- 18823 Mean- 3933, Median-2401 It is right
+skewed because Mean\>Median .
+
+3.  Frequency Plot of categorical data
+
+PLOT 1
+
+```{r}
+fig1_cut=ggplot(data=dm,aes(x=cut))+geom_bar(aes(x=cut, fill =cut))+
+  ggtitle("FREQUENCY PLOT OF CUT PARAMETER")+
+  xlab("CUT PARAMETER")+
+  ylab("COUNT")
+jpeg("fig1_cut.jpeg")
+dev.off()
+fig1_cut
+```
+
+Observations: The descending order on counts of diamonds according to
+their cut parameter is as follows: Ideal\>Premium\>VeryGood\>Good\>Fair
+
+PLOT 2
+
+```{r}
+fig2_color=ggplot(data=dm,aes(x=color))+geom_bar(aes(x=color, fill =color))+
+  ggtitle("FREQUENCY PLOT OF COLOR PARAMETER")+
+  xlab("COLOR PARAMETER")+
+  ylab("COUNT")
+jpeg("fig2_color.lpeg")
+dev.off()
+fig2_color
+```
+
+Observations: The descending order on counts of diamonds according to
+their color parameter is as follows: G\>E\>F\>H\>D\>I\>J
+
+PLOT 3
+
+```{r}
+fig3_clarity=ggplot(data=dm,aes(x=clarity))+geom_bar(aes(x=clarity,fill=clarity))+
+  ggtitle("FREQUENCY PLOT OF CLARITY PARAMETER")+
+  xlab("CLARITY PARAMETER")+
+  ylab("COUNT")
+jpeg("fig3_clarity")
+dev.off()
+fig3_clarity
+```
+
+Observations: The descending order on counts of diamonds according to
+their clarity parameter is as follows:
+SI1\>VS2\>SI2\>VS1\>VVS2\>VVS1\>IF\>I1 We see there are less numbers of
+high clarity diamonds. It may be due to the difficulty in machining
+diamonds to that extent.So, we see there are more number of SI1 and VS2
+clarity diamonds as they are easy to produce.
+
+4.Correlation and correlation graph
+
+```{r}
+names(dm)
+```
+
+Finding correlation between all numeric parameters i;e carat, depth,
+table,x,y and z.
+
+```{r}
+cname=c("carat","depth","table","price","x","y","z")
+dm_n=dm[cname]
+cor(dm_n)
+```
+
+We will remove depth and table from our correlation analysis as their
+correlation value is not significant with the other parameters that
+means we cannot make out a linear relationships between them. Plotting
+those with highest correlation vlaue's i;e carat,price,price,x,y,z
+
+```{r}
+c_f=dm_n[-c(2:3)]
+cor(c_f)
+```
+
+We see that price has a highly positive linear relationship with carat
+parameter. It also has a high positive linear relationship with X Y Z
+parameters.
+
+Correlation Plot showing scatter plot of each parameters with other
+parameters.
+
+PLOT 4
+
+```{r}
+fig4_cor=plot(c_f)
+jpeg("fig4_cor.jpeg")
+dev.off()
+fig4_cor
+```
+
+4.  Do a Hypothesis testing on mean price. create a random sample of 30%
+    data Take mean and make Hypothesis. Ho: mean =3000 H1:mean is not
+    equal to 3000 and test it.
+
+Creating a random sample 30% of the total population. Calculating the
+mean of the sample and Hypothesis testing for H0: Sample mean is equal
+to population mean ( Null Hypothesis) H1: Sample mean is not equal to
+population mean.(Alternate Hypothesis)
+
+```{r}
+set.seed(1)
+s1=sample(dm$price,size = 0.3*(length(dm$carat)),replace = FALSE)
+ms1=mean(s1)
+t.test(dm$price,mu=ms1)
+```
+
+Observation: P value = 0.1061 as p value \>alpha=0.05. we have no
+sufficient evidence to reject H0 hypothesis.
+
+Now taking Sample mean as 1000. sample mean = 1000 H0: population mean =
+1000 (Null Hypothesis) H1: Population mean is not equal to 1000
+(Alternate Hypothesis)
+
+```{r}
+ms2=1000;
+t.test(dm$price,mu=ms2)
+```
+
+Here for sample mean 1000. pvalue \< 2.2e-16 \< alpha=0.05 We have
+sufficient evidence to reject Null Hypothesis that is Population mean is
+equal to 1000.
